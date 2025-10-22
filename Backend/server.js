@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import {v2 as cloudinary} from 'cloudinary';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -64,11 +65,20 @@ app.post("/meals", upload.single("image"),async(req,res) =>{
 
         const image_url = result.secure_url;
         const date = new Date();
+        
+        //Before Deleting this Image, Call The LLM or Agent 
+        // Can Use Node MultiThreading but Heavy Computation and Latency
+        // So Better Go With Python Multiprocessing (Flask Endpoint)
+        
+        fs.unlink(req.file.path, (err) => {
+            if (err) console.error("Error deleting temp file:", err);
+        });
+
         if(!image_url){
             return res.status(400).json({message: "Cloudinary Upload Failed"});
         }
 
-
+        
         const newMeal = new Meal({user_id,
             image_url,
             date,

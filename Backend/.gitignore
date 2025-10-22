@@ -7,3 +7,5 @@ tmp/
 temp/
 
 .vscode
+## Temporary Uploads file used by multer
+/uploads 
