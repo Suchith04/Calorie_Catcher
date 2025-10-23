@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Minor Project for 7th Semester",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/Suchith04/Calorie_Catcher#readme",
   "dependencies": {
+    "@google/genai": "^1.26.0",
+    "@google/generative-ai": "^0.24.1",
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
