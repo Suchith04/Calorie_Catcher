@@ -5,10 +5,13 @@ import multer from 'multer';
 import {v2 as cloudinary} from 'cloudinary';
 import fs from 'fs';
 import callModel from './callModel.js';
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 const URI = process.env.Mongo_URI;
 const gemini_api = process.env.Gemini_API;
