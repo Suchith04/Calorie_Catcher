@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import {v2 as cloudinary} from 'cloudinary';
 import cors from "cors";
 import db from './db.js';
+import mainRoutes from './routes/mainRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 
 dotenv.config();
@@ -28,6 +30,8 @@ cloudinary.config({
   secure: true
 });
 
+app.use("",authRoutes);
+app.use("",mainRoutes);
 
 app.listen(5000,() =>{
     console.log("Server is Listening at port 5000")
