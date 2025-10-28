@@ -1,4 +1,4 @@
-.app {
+/* .app {
   text-align: center;
   padding: 2rem;
   font-family: sans-serif;
@@ -34,4 +34,9 @@ button {
 button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
+} */
+
+*{
+  margin: 0%;
+  padding: 0px;
 }

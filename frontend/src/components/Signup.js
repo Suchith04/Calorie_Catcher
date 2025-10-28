@@ -4,9 +4,9 @@ import "./Auth.css";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Signup() {
 
-    const [data,setData] = useState({email:"",
+    const [data,setData] = useState({name:"",email:"",
         password:""
     });
     const [errorMsg,setError] = useState();
@@ -41,7 +41,10 @@ function Login() {
     <div className='main'>
         <h3>SignUp</h3>
         <form onSubmit={handleSignup}>
-
+            <div className='input'>
+                <label htmlFor='name'>Name</label>
+                <input type='text' name='name' placeholder='Enter Your Name' onChange={handleChange} />
+            </div>
             <div className='input'>
                 <label htmlFor='email'>Email</label>
                 <input type='email' name='email' placeholder='Enter Your Email' onChange={handleChange} />
