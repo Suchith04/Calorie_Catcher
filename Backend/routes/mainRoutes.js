@@ -4,10 +4,13 @@ import multer from "multer";
 import fs from 'fs';
 import callModel from "../callModel.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import {v2 as cloudinary} from 'cloudinary';
+
 
 const router = express.Router();
 
 const upload = multer({ dest: "uploads/" }); // temporary upload folder
+
 
 router.get('/', (req,res) =>{
     res.json({message :"just a testing route"});
@@ -63,7 +66,7 @@ router.post("/meals", authMiddleware, upload.single("image"), async(req,res) =>{
         const imageBuffer = fs.readFileSync(req.file.path);
         const base64Image = imageBuffer.toString("base64");
 
-        const EstimateCalories = await callModel(base64Image,gemini_api);
+        const EstimateCalories = await callModel(base64Image,process.env.Gemini_API);
         
         // use regex to extract the calories 
         const match = EstimateCalories.match(/(\d+(\.\d+)?)\s*(kcal|calories?)/i);
@@ -81,7 +84,9 @@ router.post("/meals", authMiddleware, upload.single("image"), async(req,res) =>{
         });
         await newMeal.save();
         res.status(201).json({message:"Added Successfully",
-            response: EstimateCalories
+            response: EstimateCalories,
+            calories:calories,
+            image_url:image_url
         });
     }
     catch(err){
