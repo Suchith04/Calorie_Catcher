@@ -241,15 +241,37 @@ function Dashboard() {
       </form>
 
       {result && (
-        <div className="mt-6 bg-white rounded p-4 shadow flex gap-4 items-center">
-          <img src={result.imageUrl} alt="result" className="w-32 h-24 object-cover rounded" />
-          <div>
-            <div className="text-xl font-semibold">{result.calories} kcal</div>
-            <div className="text-sm text-gray-600">{new Date(result.date).toLocaleString()}</div>
-            <div className="mt-2 text-sm text-gray-700">Analysis returned from server.</div>
-          </div>
-        </div>
-      )}
+  <div className="mt-6 bg-white rounded p-4 shadow">
+    <div className="flex gap-4 items-center mb-4">
+      <img
+        src={result.image_url}
+        alt="result"
+        className="w-32 h-24 object-cover rounded"
+      />
+      <div>
+        <div className="text-xl font-semibold">{result.calories} kcal</div>
+        <div className="text-sm text-gray-600">{result.date}</div>
+      </div>
+    </div>
+
+    <hr className="my-3" />
+
+    {/* Display the server's analysis response with proper formatting */}
+    <div className="prose max-w-none text-gray-800">
+      <h3 className="text-lg font-semibold mb-2">Server Analysis:</h3>
+      <div
+        className="text-sm whitespace-pre-line"
+        dangerouslySetInnerHTML={{
+          __html: result.response
+            .replace(/\n/g, "<br/>") // preserve line breaks
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>") // make **bold** work
+            .replace(/\*(.*?)\*/g, "<i>$1</i>"), // make *italic* work
+        }}
+      />
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
