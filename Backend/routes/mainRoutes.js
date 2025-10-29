@@ -3,16 +3,17 @@ import Meal from "../models/mealModel.js";
 import multer from "multer";
 import fs from 'fs';
 import callModel from "../callModel.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 const upload = multer({ dest: "uploads/" }); // temporary upload folder
 
 router.get('/', (req,res) =>{
-    res.json({message :"just a testing message"});
+    res.json({message :"just a testing route"});
 })
 
-router.get('/meals',async(req,res) =>{
+router.get('/meals', authMiddleware, async(req,res) =>{
     try{
         const meals = await Meal.find();
         res.json(meals);
@@ -24,14 +25,14 @@ router.get('/meals',async(req,res) =>{
 }); //for History and photos.
 
 
-router.post("/meals", upload.single("image"),async(req,res) =>{
+router.post("/meals", authMiddleware, upload.single("image"), async(req,res) =>{
     
     // const {user_id, calories} = req.body;
     // if(!user_id ){
     //     return res.status(400).json({message:"All fields are Mandatory"});
     // }
 
-    const user_id = 1;
+    const user_id = req.user.id;
 
     try{
         if (!req.file) {
