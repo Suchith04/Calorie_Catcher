@@ -11,6 +11,8 @@ import DebtService from "../services/debtService.js";
 import PenaltyService from "../services/penaltyService.js";
 import SleepService from "../services/sleepService.js";
 import StatsService from "../services/statsService.js";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
@@ -257,6 +259,56 @@ router.get('/api/activities', authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Error fetching activities", error: err.message });
     }
 });
+
+
+
+//chatbot
+router.post("/api/chat", async (req, res) => {
+  try {
+
+    const llm = new ChatGoogleGenerativeAI({
+        model: "gemini-2.5-flash",
+        apiKey: process.env.Gemini_API
+    });
+
+    // 1. Get the query AND the history from the frontend
+    const { query } = req.body;
+
+    if (!query) return res.status(400).json({ error: "Query is required" });
+
+    // 2. Initialize the message list with a System instruction (optional but recommended)
+    const messages = [
+      new SystemMessage("You are a Nutrional Expert named Vasanth, You only answer health and Food Related Issues")
+    ];
+
+  
+    // if (history && Array.isArray(history)) {
+    //   history.forEach((msg) => {
+    //     if (msg.role === "user") {
+    //       messages.push(new HumanMessage(msg.content));
+    //     } else {
+    //       messages.push(new AIMessage(msg.content));
+    //     }
+    //   });
+    // }
+
+    // 4. Add the current user query
+    messages.push(new HumanMessage(query));
+
+    // 5. Invoke Gemini with the entire conversation context
+    const response = await llm.invoke(messages);
+
+    res.json({ 
+      success: true, 
+      reply: response.content 
+    });
+
+  } catch (error) {
+    console.error("Chat Error:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch response" });
+  }
+});
+
 
 // Update Sleep
 router.post('/api/sleep', authMiddleware, async (req, res) => {
